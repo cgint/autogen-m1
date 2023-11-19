@@ -15,6 +15,13 @@ config_list_lm_1234 = [
         'api_key': "NULL"
     }
 ]
+config_list_runpod = [
+    {
+        'api_type': 'open_ai',
+        'api_base': 'https://xkp67l4ihz1vt4-5000.proxy.runpod.net/v1',
+        'api_key': "NULL"
+    }
+]
 config_list_ollama_amd2 = [
     {
         'api_type': 'open_ai',
@@ -36,29 +43,35 @@ config_list_gpt4 = [
     }
 ]
 
-llm_config_ollama_amd2 = {
-    "request_timeout": 600,
-    "seed": 42,
-    "config_list": config_list_ollama_amd2,
-    "temperature": 0
-}
 llm_config_lm_1234 = {
     "request_timeout": 600,
     "seed": 42,
     "config_list": config_list_lm_1234,
-    "temperature": 0
+    "temperature": 0.2
+}
+llm_config_runpod = {
+    "request_timeout": 600,
+    "seed": 42,
+    "config_list": config_list_runpod,
+    "temperature": 0.2
+}
+llm_config_ollama_amd2 = {
+    "request_timeout": 600,
+    "seed": 42,
+    "config_list": config_list_ollama_amd2,
+    "temperature": 0.2
 }
 llm_config_gpt35 = {
     "request_timeout": 600,
     "seed": 42,
     "config_list": config_list_gpt35,
-    "temperature": 0
+    "temperature": 0.2
 }
 llm_config_gpt4 = {
     "request_timeout": 600,
     "seed": 42,
     "config_list": config_list_gpt35,
-    "temperature": 0
+    "temperature": 0.2
 }
 
 
@@ -75,13 +88,15 @@ def create_ollama_config(model):
         "request_timeout": 600,
         "seed": 42,
         "config_list": config_list,
-        "temperature": 0
+        "temperature": 0.2
     }
 
 
 def get_config_for_model(model):
     if model.startswith("ollama/"):
         return create_ollama_config(model)
+    elif model == "runpod":
+        return llm_config_runpod
     elif model == "gpt35":
         return llm_config_gpt35
     elif model == "gpt4":
@@ -138,6 +153,7 @@ def initiate_chat():
     if not task:
         task = read_file_content('/app/input/task1/task.txt')
     initiate_chat_go(task, model)
+    print("Request is done.")
     return "Chat initiated successfully"
 
 
