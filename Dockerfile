@@ -2,7 +2,7 @@
 FROM python:3.11-bookworm
 
 # Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy the current directory contents into the container at /usr/src/app
 COPY requirements.txt .
