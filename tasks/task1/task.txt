@@ -3,4 +3,4 @@ I want you to write a python script that merges the two files into one file usin
 The join column is named common_id.
 Create state of the art and professional code. Use a library where possible so the code stays clean and maintainable.
 Write the python script to a file named "solution.py" as soon as it is finished and works correctly.
-All produced files should be stored in /app/web/ folder.
+All produced files should be stored in /app/output/ folder.

@@ -116,7 +116,8 @@ def initiate_chat_go(task, model):
         code_execution_config={"work_dir": "web", "use_docker": False},
         llm_config=llm_config_selected,
         system_message="""You are a Product Owner with long experience in software development.
-    You make sure that all requested files are written as requested and at the correct location.
+    You make sure that all requested files are stored as requested and at the correct location.
+    Perform these checks thoroughly. If you mess up the result and all the hard work was wasted.
     Reply TERMINATE if the task has been solved at full satisfaction.
     Otherwise, reply CONTINUE, or the reason why the task is not solved yet. 
     Stick to the task. Do not be chatty.

@@ -4,17 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3711e625-2d2b-4bbe-b93e-8761722504e0" name="Changes" comment="Make things work">
-      <change afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tasks/task1/t1.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tasks/task1/t2.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tasks/task1/task.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
+    <list default="true" id="3711e625-2d2b-4bbe-b93e-8761722504e0" name="Changes" comment="Add logic, flask, task-example">
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,7 +177,7 @@
       <workItem from="1700394987801" duration="131000" />
       <workItem from="1700395134413" duration="8152000" />
       <workItem from="1700404238126" duration="1300000" />
-      <workItem from="1700405557128" duration="6436000" />
+      <workItem from="1700405557128" duration="6809000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -220,7 +211,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700395227008</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Add logic, flask, task-example">
+      <option name="closed" value="true" />
+      <created>1700412036188</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1700412036188</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -240,6 +239,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
     <MESSAGE value="Make things work" />
-    <option name="LAST_COMMIT_MESSAGE" value="Make things work" />
+    <MESSAGE value="Add logic, flask, task-example" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add logic, flask, task-example" />
   </component>
 </project>
