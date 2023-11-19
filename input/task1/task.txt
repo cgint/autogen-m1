@@ -1,6 +1,5 @@
 There are two csv files located in directory /app/input/task1/. t1.csv and t2.csv.
-I want you to write a python script that merges the two files into one file using out.csv as filename.
 The join column is named common_id.
+Write a correct python script that merges the two files into one file using out.csv as filename.
+Store the python script to a file named "solution.py" in /app/output/ as soon as it is finished and works correctly.
 Create state of the art and professional code. Use a library where possible so the code stays clean and maintainable.
-Write the python script to a file named "solution.py" as soon as it is finished and works correctly.
-All produced files should be stored in /app/output/ folder directly. No subdirectories.

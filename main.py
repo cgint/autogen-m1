@@ -1,3 +1,4 @@
+import random
 import autogen
 import os
 from flask import Flask, request
@@ -18,7 +19,7 @@ config_list_lm_1234 = [
 config_list_runpod = [
     {
         'api_type': 'open_ai',
-        'api_base': 'https://03zqsdnyyucggl-5000.proxy.runpod.net/v1',
+        'api_base': 'https://6clldsku5klrlv-5000.proxy.runpod.net/v1',
         'api_key': "NULL"
     }
 ]
@@ -38,55 +39,38 @@ config_list_gpt35 = [
 ]
 config_list_gpt4 = [
     {
-        'model': 'gpt-4',
+        'model': 'gpt-4-1106-preview',
         'api_key': openai_api_key
     }
 ]
 
 llm_config_lm_1234 = {
-    "request_timeout": 6000,
-    # "seed": 42,
     "config_list": config_list_lm_1234,
-    "temperature": 0.2
 }
 llm_config_runpod = {
-    "request_timeout": 6000,
-    # "seed": 42,
     "config_list": config_list_runpod,
-    "temperature": 0.2
 }
 llm_config_ollama_amd2 = {
-    "request_timeout": 6000,
-    # "seed": 42,
     "config_list": config_list_ollama_amd2,
-    "temperature": 0.2
 }
 llm_config_gpt35 = {
-    "request_timeout": 6000,
-    # "seed": 42,
     "config_list": config_list_gpt35,
-    "temperature": 0.2
 }
 llm_config_gpt4 = {
-    "request_timeout": 6000,
-    # "seed": 42,
     "config_list": config_list_gpt35,
-    "temperature": 0.2
 }
 
 
 def create_ollama_config(model):
-    return {
-        "request_timeout": 6000,
-        # "seed": 42,
+    result = {
         "config_list": {
             'api_type': 'open_ai',
             'model': model,
             'api_base': 'http://192.168.1.234:8000',
             'api_key': "NULL"
-        },
-        "temperature": 0.2
+        }
     }
+    return result
 
 
 def get_config_for_model(model):
@@ -104,6 +88,9 @@ def get_config_for_model(model):
 
 def initiate_chat_go(task, model):
     llm_config_selected = get_config_for_model(model)
+    llm_config_selected["seed"] = random.randint(1, 100000)
+    llm_config_selected["temperature"] = 0
+    llm_config_selected["request_timeout"] = 6000
 
     assistant_cto = autogen.AssistantAgent(
         name="CTO",
@@ -133,9 +120,9 @@ def initiate_chat_go(task, model):
         system_message=read_file_content('/app/input/assistants/user_proxy.txt')
     )
 
-    groupchat = autogen.GroupChat(agents=[user_proxy, assistant_cto, assistant_senior, assistant_qa], messages=[], max_round=5)
-    manager = autogen.GroupChatManager(groupchat=groupchat, llm_config=llm_config_selected)
-    user_proxy.initiate_chat(manager, message=task)
+    # groupchat = autogen.GroupChat(agents=[user_proxy, assistant_senior], messages=[], max_round=10)
+    # manager = autogen.GroupChatManager(groupchat=groupchat, llm_config=llm_config_selected)
+    user_proxy.initiate_chat(assistant_senior, message=task)
 
 
 def read_file_content(file_path):

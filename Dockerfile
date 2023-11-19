@@ -12,5 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY main.py .
 
+EXPOSE 5005
+
 # Run the script when the container launches
 CMD ["python", "./main.py"]

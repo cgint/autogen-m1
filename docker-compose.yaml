@@ -12,6 +12,6 @@ services:
       - ./main.py:/app/main.py:ro
     ports:
       - "5005:5005"
-#    network_mode: host
+    # network_mode: "host"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
