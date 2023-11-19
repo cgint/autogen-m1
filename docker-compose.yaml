@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  autogen-m1:
+    build:
+      context: .
+      dockerfile: Dockerfile
