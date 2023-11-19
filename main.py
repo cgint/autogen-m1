@@ -18,7 +18,7 @@ config_list_lm_1234 = [
 config_list_runpod = [
     {
         'api_type': 'open_ai',
-        'api_base': 'https://xkp67l4ihz1vt4-5000.proxy.runpod.net/v1',
+        'api_base': 'https://03zqsdnyyucggl-5000.proxy.runpod.net/v1',
         'api_key': "NULL"
     }
 ]
@@ -45,49 +45,46 @@ config_list_gpt4 = [
 
 llm_config_lm_1234 = {
     "request_timeout": 600,
-    "seed": 42,
+    # "seed": 42,
     "config_list": config_list_lm_1234,
     "temperature": 0.2
 }
 llm_config_runpod = {
     "request_timeout": 600,
-    "seed": 42,
+    # "seed": 42,
     "config_list": config_list_runpod,
     "temperature": 0.2
 }
 llm_config_ollama_amd2 = {
     "request_timeout": 600,
-    "seed": 42,
+    # "seed": 42,
     "config_list": config_list_ollama_amd2,
     "temperature": 0.2
 }
 llm_config_gpt35 = {
     "request_timeout": 600,
-    "seed": 42,
+    # "seed": 42,
     "config_list": config_list_gpt35,
     "temperature": 0.2
 }
 llm_config_gpt4 = {
     "request_timeout": 600,
-    "seed": 42,
+    # "seed": 42,
     "config_list": config_list_gpt35,
     "temperature": 0.2
 }
 
 
 def create_ollama_config(model):
-    config_list = [
-        {
+    return {
+        "request_timeout": 600,
+        # "seed": 42,
+        "config_list": {
             'api_type': 'open_ai',
             'model': model,
             'api_base': 'http://192.168.1.234:8000',
             'api_key': "NULL"
-        }
-    ]
-    return {
-        "request_timeout": 600,
-        "seed": 42,
-        "config_list": config_list,
+        },
         "temperature": 0.2
     }
 
@@ -114,10 +111,10 @@ def initiate_chat_go(task, model):
         system_message=read_file_content('/app/input/assistants/cto.txt')
     )
 
-    assistant_coder = autogen.AssistantAgent(
+    assistant_senior = autogen.AssistantAgent(
         name="senior_developer",
         llm_config=llm_config_selected,
-        system_message=read_file_content('/app/input/assistants/coder.txt')
+        system_message=read_file_content('/app/input/assistants/senior.txt')
     )
 
     assistant_qa = autogen.AssistantAgent(
@@ -136,7 +133,7 @@ def initiate_chat_go(task, model):
         system_message=read_file_content('/app/input/assistants/user_proxy.txt')
     )
 
-    groupchat = autogen.GroupChat(agents=[user_proxy, assistant_cto, assistant_coder, assistant_qa], messages=[], max_round=5)
+    groupchat = autogen.GroupChat(agents=[user_proxy, assistant_cto, assistant_senior, assistant_qa], messages=[], max_round=5)
     manager = autogen.GroupChatManager(groupchat=groupchat, llm_config=llm_config_selected)
     user_proxy.initiate_chat(manager, message=task)
 

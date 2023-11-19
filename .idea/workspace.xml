@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3711e625-2d2b-4bbe-b93e-8761722504e0" name="Changes" comment="Switch to using input-dir. Text files for assistants">
+    <list default="true" id="3711e625-2d2b-4bbe-b93e-8761722504e0" name="Changes" comment="Updates on system messages, add runpod">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input/assistants/coder.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input/assistants/coder.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input/assistants/coder.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input/assistants/senior.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/input/assistants/cto.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input/assistants/cto.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input/assistants/qa.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input/assistants/qa.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input/assistants/user_proxy.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input/assistants/user_proxy.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input/task1/task.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input/task1/task.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -187,7 +183,7 @@
       <workItem from="1700394987801" duration="131000" />
       <workItem from="1700395134413" duration="8152000" />
       <workItem from="1700404238126" duration="1300000" />
-      <workItem from="1700405557128" duration="11166000" />
+      <workItem from="1700405557128" duration="13062000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -245,7 +241,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700413218270</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Updates on system messages, add runpod">
+      <option name="closed" value="true" />
+      <created>1700419779005</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1700419779005</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -268,6 +272,7 @@
     <MESSAGE value="Add logic, flask, task-example" />
     <MESSAGE value="Update to output instead of web" />
     <MESSAGE value="Switch to using input-dir. Text files for assistants" />
-    <option name="LAST_COMMIT_MESSAGE" value="Switch to using input-dir. Text files for assistants" />
+    <MESSAGE value="Updates on system messages, add runpod" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updates on system messages, add runpod" />
   </component>
 </project>
