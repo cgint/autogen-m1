@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./tasks:/app/tasks
+      - ./input:/app/input
       - ./output:/app/output
       - ./main.py:/app/main.py
     ports:

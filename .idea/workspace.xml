@@ -4,8 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3711e625-2d2b-4bbe-b93e-8761722504e0" name="Changes" comment="Add logic, flask, task-example">
+    <list default="true" id="3711e625-2d2b-4bbe-b93e-8761722504e0" name="Changes" comment="Update to output instead of web">
+      <change afterPath="$PROJECT_DIR$/input/assistants/coder.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/assistants/cto.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/assistants/qa.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/assistants/user_proxy.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tasks/task1/t1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/input/task1/t1.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tasks/task1/t2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/input/task1/t2.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tasks/task1/task.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input/task1/task.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +76,9 @@
       <recent name="$PROJECT_DIR$/tasks/task1" />
       <recent name="$PROJECT_DIR$/web/ex1" />
       <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/input" />
     </key>
   </component>
   <component name="RunManager">
@@ -177,7 +189,7 @@
       <workItem from="1700394987801" duration="131000" />
       <workItem from="1700395134413" duration="8152000" />
       <workItem from="1700404238126" duration="1300000" />
-      <workItem from="1700405557128" duration="6809000" />
+      <workItem from="1700405557128" duration="7547000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -219,7 +231,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700412036188</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Update to output instead of web">
+      <option name="closed" value="true" />
+      <created>1700412433667</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1700412433667</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -240,6 +260,7 @@
     <MESSAGE value="init" />
     <MESSAGE value="Make things work" />
     <MESSAGE value="Add logic, flask, task-example" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add logic, flask, task-example" />
+    <MESSAGE value="Update to output instead of web" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update to output instead of web" />
   </component>
 </project>

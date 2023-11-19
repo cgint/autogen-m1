@@ -92,20 +92,23 @@ def get_config_for_model(model):
 
 def initiate_chat_go(task, model):
     llm_config_selected = get_config_for_model(model)
+
     assistant_cto = autogen.AssistantAgent(
         name="CTO",
         llm_config=llm_config_selected,
-        system_message="""You are a Chief technical officer of a tech company with long experience in software development specially in python.
-    Stick to the task. Do not be chatty.
-    """
+        system_message=read_file_content('/app/input/assistants/cto.txt')
     )
 
     assistant_coder = autogen.AssistantAgent(
         name="senior_developer",
         llm_config=llm_config_selected,
-        system_message="""You are a Senior software developer with long experience in software development specially in python.
-    Stick to the task. Do not be chatty.
-    """
+        system_message=read_file_content('/app/input/assistants/coder.txt')
+    )
+
+    assistant_qa = autogen.AssistantAgent(
+        name="quality_assurance",
+        llm_config=llm_config_selected,
+        system_message=read_file_content('/app/input/assistants/qa.txt')
     )
 
     user_proxy = autogen.UserProxyAgent(
@@ -113,30 +116,27 @@ def initiate_chat_go(task, model):
         human_input_mode="NEVER",
         max_consecutive_auto_reply=10,
         is_termination_msg=lambda x: x.get("content", "").rstrip().endswith("TERMINATE"),
-        code_execution_config={"work_dir": "web", "use_docker": False},
+        code_execution_config={"work_dir": "output", "use_docker": False},
         llm_config=llm_config_selected,
-        system_message="""You are a Product Owner with long experience in software development.
-    You make sure that all requested files are stored as requested and at the correct location.
-    Perform these checks thoroughly. If you mess up the result and all the hard work was wasted.
-    Reply TERMINATE if the task has been solved at full satisfaction.
-    Otherwise, reply CONTINUE, or the reason why the task is not solved yet. 
-    Stick to the task. Do not be chatty.
-    """
+        system_message=read_file_content('/app/input/assistants/user_proxy.txt')
     )
 
-    groupchat = autogen.GroupChat(agents=[user_proxy, assistant_cto, assistant_coder], messages=[], max_round=5)
+    groupchat = autogen.GroupChat(agents=[user_proxy, assistant_cto, assistant_coder, assistant_qa], messages=[], max_round=5)
     manager = autogen.GroupChatManager(groupchat=groupchat, llm_config=llm_config_selected)
     user_proxy.initiate_chat(manager, message=task)
+
+
+def read_file_content(file_path):
+    return open(file_path, 'r').read()
 
 
 @app.route("/initiate_chat", methods=["POST"])
 def initiate_chat():
     request_json = request.get_json()
-    task = request_json["task"]
     model = request_json["model"]
+    task = request_json["task"]
     if not task:
-        with open('/app/tasks/task1/task.txt', 'r') as task_file:
-            task = task_file.read()
+        task = read_file_content('/app/input/task1/task.txt')
     initiate_chat_go(task, model)
     return "Chat initiated successfully"
 
