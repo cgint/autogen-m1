@@ -44,31 +44,31 @@ config_list_gpt4 = [
 ]
 
 llm_config_lm_1234 = {
-    "request_timeout": 600,
+    "request_timeout": 6000,
     # "seed": 42,
     "config_list": config_list_lm_1234,
     "temperature": 0.2
 }
 llm_config_runpod = {
-    "request_timeout": 600,
+    "request_timeout": 6000,
     # "seed": 42,
     "config_list": config_list_runpod,
     "temperature": 0.2
 }
 llm_config_ollama_amd2 = {
-    "request_timeout": 600,
+    "request_timeout": 6000,
     # "seed": 42,
     "config_list": config_list_ollama_amd2,
     "temperature": 0.2
 }
 llm_config_gpt35 = {
-    "request_timeout": 600,
+    "request_timeout": 6000,
     # "seed": 42,
     "config_list": config_list_gpt35,
     "temperature": 0.2
 }
 llm_config_gpt4 = {
-    "request_timeout": 600,
+    "request_timeout": 6000,
     # "seed": 42,
     "config_list": config_list_gpt35,
     "temperature": 0.2
@@ -77,7 +77,7 @@ llm_config_gpt4 = {
 
 def create_ollama_config(model):
     return {
-        "request_timeout": 600,
+        "request_timeout": 6000,
         # "seed": 42,
         "config_list": {
             'api_type': 'open_ai',
