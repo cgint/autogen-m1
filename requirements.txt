@@ -1,1 +1,6 @@
 pyautogen
+flask
+flask-cors
+
+# for execution environment
+pandas

@@ -10,7 +10,7 @@ COPY requirements.txt .
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY main.py .
 
 # Run the script when the container launches
 CMD ["python", "./main.py"]

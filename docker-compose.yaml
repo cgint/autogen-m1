@@ -1,12 +1,17 @@
 version: '3.8'
 
 services:
-  autogen-m1:
+  autogenm1:
     image: autogen-m1
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
+      - ./tasks:/app/tasks
       - ./web:/app/web
+      - ./main.py:/app/main.py
+    ports:
+      - "5005:5005"
+#    network_mode: host
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
