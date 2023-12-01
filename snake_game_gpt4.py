@@ -27,6 +27,9 @@ def main(stdscr):
         key = key if next_key == -1 else next_key
 
         if snake[0][0] in [0, sh] or             snake[0][1]  in [0, sw] or             snake[0] in snake[1:]:
+            with open('game_state.txt', 'w') as f:
+                f.write('Game Over\n')
+                f.write('Score: {}\n'.format(len(snake)))
             curses.endwin()
             quit()
         
