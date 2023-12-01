@@ -76,6 +76,10 @@
             <textarea id="aider_task" name="aider_task" rows="10" cols="48"></textarea>
         </div>
         <div class="form-group">
+            <label for="aider_model">Model:</label>
+            <input type="text" id="aider_model" name="aider_model" value="ollama/codellama:7b">
+        </div>
+        <div class="form-group">
             <button type="submit">Initiate Aider Chat</button>
         </div>
     </form>
@@ -85,15 +89,14 @@
     document.getElementById('chatForm_aider').addEventListener('submit', function(event) {
         event.preventDefault();
 
-        let task = document.getElementById('aider_task').value;
-
         fetch('http://localhost:5005/initiate_chat_aider', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 
-                task: task
+                task: document.getElementById('aider_task').value,
+                model: document.getElementById('aider_model').value
             })
         })
             .then(response => response.text())
