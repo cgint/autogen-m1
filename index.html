@@ -69,6 +69,42 @@
 </div>
 
 <div class="container">
+    <h2>Chat Aider Initiation</h2>
+    <form id="chatForm_aider">
+        <div class="form-group">
+            <label for="aider_task">Task:</label>
+            <textarea id="aider_task" name="aider_task" rows="10" cols="48"></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit">Initiate Aider Chat</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('chatForm_aider').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        let task = document.getElementById('aider_task').value;
+
+        fetch('http://localhost:5005/initiate_chat_aider', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                task: task
+            })
+        })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+</script>
+
+<div class="container">
     <h2>Chat Group Initiation</h2>
     <form id="chatForm_group">
         <div class="form-group">
