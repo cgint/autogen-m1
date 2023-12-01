@@ -90,5 +90,43 @@ def index():
     return send_file("index.html")
 
 
+@app.route("/initiate_chat_aider", methods=["POST"])
+def initiate_chat_aider():
+    # Extract 'task' and 'model' from the POST request
+    request_json = request.get_json()
+    task = request_json.get("task", "")
+    model = request_json.get("model", "default_model")  # Default model if not provided
+    if not task:
+        return "Error: No task provided", 400
+
+    # Inline system messages for each assistant role
+    system_messages = {
+        "CTO": "Oversee the technical aspects of the project. Ensure architectural decisions and technical standards are met.",
+        "Senior Developer": "Write clean, efficient code and provide technical expertise. Collaborate with QA to ensure code quality.",
+        "QA": "Perform thorough testing and validation. Report and track issues found, and work closely with developers to resolve them.",
+        "Product Owner": "Keep the end-user in mind to ensure solutions meet user needs. Document all processes and decisions.",
+        "User Proxy": "Facilitate communication between the user and the system. Log issues, notify other assistants, and handle errors."
+    }
+
+    # Define the configuration for the assistants
+    llm_config = get_llm_config(model, 0.7)  # Example temperature
+
+    # Create the assistants with their specific system messages
+    assistants = {
+        "CTO": autogen.AssistantAgent("CTO", llm_config, system_messages["CTO"]),
+        "Senior Developer": autogen.AssistantAgent("Senior Developer", llm_config, system_messages["Senior Developer"]),
+        "QA": autogen.AssistantAgent("QA", llm_config, system_messages["QA"]),
+        "Product Owner": autogen.AssistantAgent("Product Owner", llm_config, system_messages["Product Owner"]),
+        "User Proxy": autogen.UserProxyAgent("User Proxy", llm_config, system_messages["User Proxy"])
+    }
+
+    # Example of initiating chat with the Senior Developer assistant
+    # This should be replaced with the actual logic for initiating the chat
+    response = assistants["Senior Developer"].process(task)
+
+    # Return a success response
+    return "Chat initiated successfully with task: " + task
+
+# Start the Flask application
 if __name__ == "__main__":
     app.run(port=5005, host="0.0.0.0")
