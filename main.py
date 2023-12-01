@@ -178,6 +178,43 @@ def initiate_chat_group():
     return "Group-Chat initiated successfully"
 
 
+@app.route("/initiate_chat_aider", methods=["POST"])
+def initiate_chat_aider():
+    print("Aider-Request has been triggered.")
+    request_json = request.get_json()
+    task = request_json.get("task", "")
+    if not task:
+        return "Error: No task provided", 400
+
+    # Inline system messages
+    system_message_senior = "Senior software developer with long experience in software development specially in python. You are responsible for providing technical expertise and guidance to the other assistants to ensure that the tasks are completed efficiently and effectively. Work closely with the QA to ensure code quality and with the CTO to align on architectural decisions. If any issues arise, proactively involve the QA and CTO, and seek input from the Product Owner to ensure the product meets the client's expectations."
+    system_message_user_proxy = "You make sure that files are stored to my local disk as requested by the user and the user request is fulfilled. Reply TERMINATE if the task has been solved at full satisfaction. Otherwise, reply CONTINUE, or the reason why the task is not solved yet. If you encounter any issues or need assistance, actively involve the CTO, senior developer, QA, and Product Owner for their unique perspectives and help. Encourage collaboration among the assistants to leverage their combined expertise for a superior solution."
+
+    # Configuration for the assistants
+    llm_config_selected = get_llm_config("ollama/codellama", 0)
+
+    # Create the assistants
+    assistant_senior = autogen.AssistantAgent(
+        name="senior_developer",
+        llm_config=llm_config_selected,
+        system_message=system_message_senior
+    )
+    user_proxy = autogen.UserProxyAgent(
+        name="user_proxy",
+        human_input_mode="NEVER",
+        max_consecutive_auto_reply=5,
+        is_termination_msg=lambda x: x.get("content", "").rstrip().endswith("TERMINATE"),
+        code_execution_config={"work_dir": "/app/output", "use_docker": False},
+        llm_config=llm_config_selected,
+        system_message=system_message_user_proxy,
+        default_auto_reply="You are going to figure all out by your own. Work by yourself, the user won't reply until you output `TERMINATE` to end the conversation."
+    )
+
+    # Initiate the chat
+    user_proxy.initiate_chat(assistant_senior, message=task)
+    print("Aider-Request is done.")
+    return "Aider-Chat initiated successfully"
+
 @app.route("/", methods=["GET"])
 def index():
     return send_file("index.html")
