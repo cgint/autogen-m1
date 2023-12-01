@@ -1,3 +1,4 @@
 /output/
 /.cache/
 /.vscode/settings.json
+.aider*
