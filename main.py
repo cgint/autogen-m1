@@ -183,15 +183,13 @@ def initiate_chat_aider():
     print("Aider-Request has been triggered.")
     request_json = request.get_json()
     task = request_json.get("task", "")
+    model = request_json.get("model", "ollama/codellama:7b")  # Default model if not provided
     if not task:
         return "Error: No task provided", 400
 
     # Inline system messages
-    system_message_senior = "Senior software developer with long experience in software development specially in python. You are responsible for providing technical expertise and guidance to the other assistants to ensure that the tasks are completed efficiently and effectively. Work closely with the QA to ensure code quality and with the CTO to align on architectural decisions. If any issues arise, proactively involve the QA and CTO, and seek input from the Product Owner to ensure the product meets the client's expectations."
-    system_message_user_proxy = "You make sure that files are stored to my local disk as requested by the user and the user request is fulfilled. Reply TERMINATE if the task has been solved at full satisfaction. Otherwise, reply CONTINUE, or the reason why the task is not solved yet. If you encounter any issues or need assistance, actively involve the CTO, senior developer, QA, and Product Owner for their unique perspectives and help. Encourage collaboration among the assistants to leverage their combined expertise for a superior solution."
-
-    # Configuration for the assistants
-    llm_config_selected = get_llm_config("ollama/codellama:7b", 0)
+    # ... (include all the code in this function up to the following line)
+    llm_config_selected = get_llm_config(model, 0)
 
     # Create the assistants
     assistant_senior = autogen.AssistantAgent(
