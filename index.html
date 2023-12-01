@@ -27,7 +27,7 @@
             font-weight: bold;
         }
         .form-group input {
-            width: 100%;
+            width: 95%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -48,15 +48,57 @@
 </head>
 <body>
 <div class="container">
-    <h2>Chat Initiation</h2>
-    <form id="chatForm">
+    <h2>Chat Duo Initiation</h2>
+    <form id="chatForm_duo">
         <div class="form-group">
-            <label for="task">Task:</label>
-            <input type="text" id="task" name="task">
+            <label for="duo_task">Task:</label>
+            <textarea id="duo_task" name="duo_task" rows="10" cols="48"></textarea>
+        </div>        
+        <div class="form-group">
+            <label for="duo_model">Model:</label>
+            <input type="text" id="duo_model" name="duo_model" value="ollama/codellama">
         </div>
         <div class="form-group">
-            <label for="model">Model:</label>
-            <input type="text" id="model" name="model" value="ollama/codellama">
+            <label for="duo_temperature">Temperature:</label>
+            <input type="number" step="0.1" id="duo_temperature" name="duo_temperature" value="0">
+        </div>
+        <div class="form-group">
+            <button type="submit">Trigger</button>
+        </div>
+    </form>
+</div>
+
+<div class="container">
+    <h2>Chat Group Initiation</h2>
+    <form id="chatForm_group">
+        <div class="form-group">
+            <label for="group_task">Task:</label>
+            <textarea id="group_task" name="group_task" rows="10" cols="48"></textarea>
+        </div>        
+        <div class="form-group">
+            <label for="group_model">Model:</label>
+            <input type="text" id="group_model" name="group_model" value="ollama/codellama">
+        </div>
+        <div class="form-group">
+            <label for="group_model_proxy">Model (Proxy):</label>
+            <input type="text" id="group_model_proxy" name="group_model_proxy" value="ollama/codellama">
+        </div>
+        <!-- add model entries for qa, po and senior -->
+        <div class="form-group">
+            <label for="group_model_qa">Model (QA):</label>
+            <input type="text" id="group_model_qa" name="group_model_qa" value="ollama/codellama">
+        </div>
+        <div class="form-group">
+            <label for="group_model_po">Model (PO):</label>
+            <input type="text" id="group_model_po" name="group_model_po" value="ollama/codellama">
+        </div>
+        <div class="form-group">
+            <label for="group_model_senior">Model (Senior):</label>
+            <input type="text" id="group_model_senior" name="group_model_senior" value="ollama/codellama">
+        </div>
+        <div class="form-group">
+            <label for="group_temperature">Temperature:</label>
+            <input type="number" step="0.1" id="group_temperature" name="group_temperature" value="0">
         </div>
         <div class="form-group">
             <button type="submit">Trigger</button>
@@ -65,18 +107,56 @@
 </div>
 
 <script>
-    document.getElementById('chatForm').addEventListener('submit', function(event) {
+    document.getElementById('chatForm_duo').addEventListener('submit', function(event) {
         event.preventDefault();
 
-        let task = document.getElementById('task').value;
-        let model = document.getElementById('model').value;
+        let task = document.getElementById('duo_task').value;
+        let model = document.getElementById('duo_model').value;
+        let temperature = document.getElementById('duo_temperature').value
 
-        fetch('http://localhost:5005/initiate_chat', {
+        fetch('http://localhost:5005/initiate_chat_duo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ task: task, model: model})
+            body: JSON.stringify({ 
+                task: task, 
+                model: model, 
+                temperature: temperature
+            })
+        })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+
+    document.getElementById('chatForm_group').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        let task = document.getElementById('group_task').value;
+        let model = document.getElementById('group_model').value;
+        let model_proxy = document.getElementById('group_model_proxy').value;
+        let model_qa = document.getElementById('group_model_qa').value;
+        let model_po = document.getElementById('group_model_po').value;
+        let model_senior = document.getElementById('group_model_senior').value
+        let temperature = document.getElementById('group_temperature').value
+
+        fetch('http://localhost:5005/initiate_chat_group', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                task: task, 
+                model: model, 
+                model_proxy: model_proxy, 
+                model_qa: model_qa, 
+                model_po: model_po, 
+                model_senior: model_senior, 
+                temperature: temperature
+            })
         })
             .then(response => response.text())
             .then(data => console.log(data))

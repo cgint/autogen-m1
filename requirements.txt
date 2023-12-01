@@ -1,4 +1,5 @@
 pyautogen
+pymemgpt
 flask
 flask-cors
 

@@ -1,8 +1,9 @@
 import random
 import autogen
 import os
-from flask import Flask, request
+from flask import Flask, request, send_file
 from flask_cors import CORS
+
 
 app = Flask(__name__)
 CORS(app)
@@ -19,15 +20,7 @@ config_list_lm_1234 = [
 config_list_runpod = [
     {
         'api_type': 'open_ai',
-        'api_base': 'https://6clldsku5klrlv-5000.proxy.runpod.net/v1',
-        'api_key': "NULL"
-    }
-]
-config_list_ollama_amd2 = [
-    {
-        'api_type': 'open_ai',
-        'model': 'ollama/codellama',
-        'api_base': 'http://192.168.1.234:8000',
+        'api_base': 'https://o09ju7se1yeyun-5000.proxy.runpod.net/v1',
         'api_key': "NULL"
     }
 ]
@@ -44,101 +37,150 @@ config_list_gpt4 = [
     }
 ]
 
-llm_config_lm_1234 = {
-    "config_list": config_list_lm_1234,
-}
-llm_config_runpod = {
-    "config_list": config_list_runpod,
-}
-llm_config_ollama_amd2 = {
-    "config_list": config_list_ollama_amd2,
-}
-llm_config_gpt35 = {
-    "config_list": config_list_gpt35,
-}
-llm_config_gpt4 = {
-    "config_list": config_list_gpt35,
-}
+
+def create_ollama_config_list(model):
+    return [{
+        'api_type': 'open_ai',
+        'model': model,
+        'api_base': 'http://amd2.local:8000',
+        'api_key': "NULL"
+    }]
 
 
-def create_ollama_config(model):
-    result = {
-        "config_list": {
-            'api_type': 'open_ai',
-            'model': model,
-            'api_base': 'http://192.168.1.234:8000',
-            'api_key': "NULL"
-        }
-    }
-    return result
-
-
-def get_config_for_model(model):
-    if model.startswith("ollama/"):
-        return create_ollama_config(model)
-    elif model == "runpod":
-        return llm_config_runpod
-    elif model == "gpt35":
-        return llm_config_gpt35
-    elif model == "gpt4":
-        return llm_config_gpt4
-    else:
-        return llm_config_lm_1234
-
-
-def initiate_chat_go(task, model):
-    llm_config_selected = get_config_for_model(model)
-    llm_config_selected["seed"] = random.randint(1, 100000)
-    llm_config_selected["temperature"] = 0
-    llm_config_selected["request_timeout"] = 6000
-
-    assistant_cto = autogen.AssistantAgent(
-        name="CTO",
-        llm_config=llm_config_selected,
-        system_message=read_file_content('/app/input/assistants/cto.txt')
-    )
-
-    assistant_senior = autogen.AssistantAgent(
-        name="senior_developer",
-        llm_config=llm_config_selected,
-        system_message=read_file_content('/app/input/assistants/senior.txt')
-    )
-
-    assistant_qa = autogen.AssistantAgent(
-        name="quality_assurance",
-        llm_config=llm_config_selected,
-        system_message=read_file_content('/app/input/assistants/qa.txt')
-    )
-
-    user_proxy = autogen.UserProxyAgent(
-        name="product_owner",
-        human_input_mode="NEVER",
-        max_consecutive_auto_reply=10,
-        is_termination_msg=lambda x: x.get("content", "").rstrip().endswith("TERMINATE"),
-        code_execution_config={"work_dir": "output", "use_docker": False},
-        llm_config=llm_config_selected,
-        system_message=read_file_content('/app/input/assistants/user_proxy.txt')
-    )
-
-    # groupchat = autogen.GroupChat(agents=[user_proxy, assistant_senior], messages=[], max_round=10)
-    # manager = autogen.GroupChatManager(groupchat=groupchat, llm_config=llm_config_selected)
-    user_proxy.initiate_chat(assistant_senior, message=task)
+def create_ollama_runpod_config_list(model):
+    return [{
+        'api_type': 'open_ai',
+        'model': model,
+        'api_base': 'http://amd2.local:8001',
+        'api_key': "NULL"
+    }]
 
 
 def read_file_content(file_path):
     return open(file_path, 'r').read()
 
 
-@app.route("/initiate_chat", methods=["POST"])
-def initiate_chat():
+def get_config_list_for_model(model):
+    if model.startswith("ollama/"):
+        return create_ollama_config_list(model)
+    elif model.startswith("ollama_runpod/"):
+        return create_ollama_runpod_config_list(model.replace("_runpod", ""))
+    elif model == "runpod":
+        return config_list_runpod
+    elif model == "gpt35":
+        return config_list_gpt35
+    elif model == "gpt4":
+        return config_list_gpt4
+    else:
+        return config_list_lm_1234
+
+
+def initiate_chat_duo_go(task, model, temperature):
+    llm_config_selected = get_llm_config(model, temperature)
+    # In the AutoGen example, we create an AssistantAgent to play the role of the coder
+    assistant_senior = autogen.AssistantAgent(
+        name="senior_developer",
+        llm_config=llm_config_selected,
+        system_message=read_file_content('/app/input/assistants/senior.txt')
+    )
+    user_proxy = autogen.UserProxyAgent(
+        name="product_owner",
+        human_input_mode="NEVER",
+        max_consecutive_auto_reply=5,
+        is_termination_msg=lambda x: x.get("content", "").rstrip().endswith("TERMINATE"),
+        code_execution_config={"work_dir": "/app/output", "use_docker": False},
+        llm_config=llm_config_selected,
+        system_message=read_file_content('/app/input/assistants/user_proxy.txt'),
+        default_auto_reply="You are going to figure all out by your own. "
+        "Work by yourself, the user won't reply until you output `TERMINATE` to end the conversation."
+    )
+    user_proxy.initiate_chat(assistant_senior, message=task)
+
+
+def initiate_chat_group_go(task, model, model_proxy, model_qa, model_po, model_senior, temperature):
+
+    # assistant_cto = autogen.AssistantAgent(
+    #     name="CTO",
+    #     llm_config=llm_config_selected,
+    #     system_message=read_file_content('/app/input/assistants/cto.txt')
+    # )
+
+    # In the AutoGen example, we create an AssistantAgent to play the role of the coder
+    assistant_senior = autogen.AssistantAgent(
+        name="senior_developer",
+        llm_config=get_llm_config(model_senior, temperature),
+        system_message=read_file_content('/app/input/assistants/senior.txt')
+    )
+    assistant_qa = autogen.AssistantAgent(
+        name="quality_assurance",
+        llm_config=get_llm_config(model_qa, temperature),
+        system_message=read_file_content('/app/input/assistants/qa.txt')
+    )
+    assistant_po = autogen.AssistantAgent(
+        name="product_owner",
+        llm_config=get_llm_config(model_po, temperature),
+        system_message=read_file_content('/app/input/assistants/po.txt')
+    )
+    user_proxy = autogen.UserProxyAgent(
+        name="user_proxy",
+        human_input_mode="NEVER",
+        max_consecutive_auto_reply=5,
+        is_termination_msg=lambda x: x.get("content", "").rstrip().endswith("TERMINATE"),
+        code_execution_config={"work_dir": "/app/output", "use_docker": False},
+        llm_config=get_llm_config(model_proxy, temperature),
+        system_message=read_file_content('/app/input/assistants/user_proxy.txt'),
+        default_auto_reply="You are going to figure all out by your own. "
+        "Work by yourself, the user won't reply until you output `TERMINATE` to end the conversation."
+    )
+    groupchat = autogen.GroupChat(agents=[user_proxy, assistant_po, assistant_senior, assistant_qa], messages=[], max_round=8)
+    manager = autogen.GroupChatManager(groupchat=groupchat, llm_config=get_llm_config(model, temperature))
+    user_proxy.initiate_chat(manager, message=task)
+
+
+def get_llm_config(model_proxy, temperature):
+    return { 
+        "config_list": get_config_list_for_model(model_proxy),
+        "seed": random.randint(1, 100000),
+        "temperature": temperature,
+        "request_timeout": 6000
+    }
+
+
+@app.route("/initiate_chat_duo", methods=["POST"])
+def initiate_chat_duo():
+    print("Duo-Request has been triggered.")
     request_json = request.get_json()
     model = request_json["model"]
+    temperature = request_json["temperature"]
     task = request_json["task"]
     if not task:
         task = read_file_content('/app/input/task1/task.txt')
-    initiate_chat_go(task, model)
-    print("Request is done.")
-    return "Chat initiated successfully"
+    initiate_chat_duo_go(task, model, temperature)
+    print("Duo-Request is done.")
+    return "Duo-Chat initiated successfully"
+
+
+@app.route("/initiate_chat_group", methods=["POST"])
+def initiate_chat_group():
+    print("Group-Request has been triggered.")
+    request_json = request.get_json()
+    model = request_json["model"]
+    model_proxy = request_json["model_proxy"]
+    model_qa = request_json["model_qa"]
+    model_po = request_json["model_po"]
+    model_senior = request_json["model_senior"]
+    temperature = request_json["temperature"]
+    task = request_json["task"]
+    if not task:
+        task = read_file_content('/app/input/task1/task.txt')
+    initiate_chat_group_go(task, model, model_proxy, model_qa, model_po, model_senior, temperature)
+    print("Group-Request is done.")
+    return "Group-Chat initiated successfully"
+
+
+@app.route("/", methods=["GET"])
+def index():
+    return send_file("index.html")
 
 
 if __name__ == "__main__":
